@@ -89,6 +89,16 @@ public final class Weapon {
       return this.frame >= 0;
    }
 
+   /** Returns the current muzzle-flash strength, or zero when the weapon is idle. */
+   public final float getMuzzleFlashIntensity() {
+      if(!this.isFire()) return 0.0F;
+
+      // The first visible frames are brightest; the light fades with the sprite.
+      if(this.frame <= 1) return 1.0F;
+      if(this.frame == 2) return 0.55F;
+      return 0.25F;
+   }
+
    public final void draw(Graphics g, int x, int y, int width, int height) { // x, y, width, height - координаты, ширина и высота области внутри черной рамки
       if(this.isFire()) {
          g.drawImage(this.imgFire, width - this.dx_fire + this.dx, height - this.dy_fire + this.dy + y, 3); // 3=2+1 = VCENTER+HCENTER

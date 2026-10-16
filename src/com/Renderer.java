@@ -4,6 +4,7 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.m3g.Background;
 import javax.microedition.m3g.Camera;
 import javax.microedition.m3g.Graphics3D;
+import javax.microedition.m3g.Light;
 import javax.microedition.m3g.Node;
 import javax.microedition.m3g.Transform;
 
@@ -21,6 +22,11 @@ public final class Renderer {
 	private final Transform invCam = new Transform();
 	
 	private final Transform tmpTrans = new Transform();
+	private final Light weaponLight = new Light();
+	private final Transform weaponLightTrans = new Transform();
+	private final Vector3D weaponLightPos = new Vector3D();
+	private final Vector3D weaponLightDirection = new Vector3D();
+	private float weaponLightIntensity;
 	
 	private int renderX, renderY;
 	public int width, height;
@@ -44,6 +50,12 @@ public final class Renderer {
 		
 		bck.setColorClearEnable(false);
 		
+		// A short-range warm point light is enabled only while the muzzle flash is visible.
+		weaponLight.setMode(Light.OMNI);
+		weaponLight.setColor(0xFFFFB0);
+		weaponLight.setAttenuation(1.0F, 0.00035F, 0.0F);
+		weaponLight.setIntensity(0.0F);
+
 		viewportPhysH = (float)(Math.tan(Math.toRadians(fovy / 2.0f)) * nearPlane) * 2f;
 		viewportPhysW = viewportPhysH * width / height;
 		
@@ -95,6 +107,21 @@ public final class Renderer {
 	
 	public final Transform getInvCam() {
 		return invCam;
+	}
+
+	/** Positions a brief point light at the player's muzzle in world space. */
+	public final void setWeaponLight(Vector3D cameraPosition, Vector3D rotation, float intensity) {
+		weaponLightIntensity = intensity;
+		if(intensity <= 0.0F) return;
+
+		weaponLightDirection.setFromRotation(rotation.x, rotation.y);
+		weaponLightPos.set(
+				cameraPosition.x + weaponLightDirection.x * 500 / (1 << 14),
+				cameraPosition.y - 250 + weaponLightDirection.y * 500 / (1 << 14),
+				cameraPosition.z + weaponLightDirection.z * 500 / (1 << 14)
+		);
+		weaponLightTrans.setIdentity();
+		weaponLightTrans.postTranslate(weaponLightPos.x, weaponLightPos.y, weaponLightPos.z);
 	}
 	
 	public final void setClip(int x1, int y1, int x2, int y2) {
@@ -166,16 +193,11 @@ public final class Renderer {
 		g3d.setViewport(x, y, width, height);
 		g3d.clear(bck);
 		
-		/*Light light = new Light();
-		light.setMode(Light.OMNI);
-		light.setColor(0xffffff);
-		light.setAttenuation(0, 0.0001f, 0);
-		
-		Transform tmpMat = new Transform();
-		tmpMat.postTranslate(lightX, lightY, lightZ);
-		
 		g3d.resetLights();
-		g3d.addLight(light, tmpMat);*/
+		if(weaponLightIntensity > 0.0F) {
+			weaponLight.setIntensity(weaponLightIntensity);
+			g3d.addLight(weaponLight, weaponLightTrans);
+		}
 	}
 
 	public final void flush(Graphics g) {

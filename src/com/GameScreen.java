@@ -121,6 +121,8 @@ public final class GameScreen extends Canvas {
 		int part = this.player.getPart();
 		var10000.y += playerHeight;
 		var2.setCamera(var5, player.getCharacter().getRotation());
+		float muzzleFlash = var3 ? 0.0F : player.getArsenal().currentWeapon().getMuzzleFlashIntensity();
+		var2.setWeaponLight(var5, player.getCharacter().getRotation(), muzzleFlash);
 		int var4 = this.height / 2 - var2.getHeight() / 2;
 		this.scene.render(g, 0, var4, part, var10000);
 		var5.y -= playerHeight;

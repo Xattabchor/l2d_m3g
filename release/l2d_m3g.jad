@@ -1,0 +1,8 @@
+MIDlet-1: L2DM3G,,home.Main
+MIDlet-Vendor: Vendor
+MIDlet-Name: l2d_m3g
+MIDlet-Version: 1.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
+MIDlet-Jar-URL: l2d_m3g.jar
+MIDlet-Jar-Size: 941753
