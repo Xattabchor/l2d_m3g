@@ -3,3 +3,5 @@
 private/
 /ModelConverter/dist/
 /ModelConverter/build/
+/ModelConverterJ2ME/build/
+/ModelConverterJ2ME/dist/

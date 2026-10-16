@@ -1,0 +1,9 @@
+MIDlet-1: 3D2 OBJ Converter,,rmn20.j2me.ConverterMIDlet
+MIDlet-Name: 3D2 OBJ Converter
+MIDlet-Vendor: L2D M3G
+MIDlet-Version: 1.0.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0
+MIDlet-Permissions-Opt: javax.microedition.io.Connector.file.read, javax.microedition.io.Connector.file.write
+MIDlet-Jar-URL: ModelConverterJ2ME.jar
+MIDlet-Jar-Size: 15513
